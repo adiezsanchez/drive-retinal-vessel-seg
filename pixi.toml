@@ -1,0 +1,67 @@
+# Pedagogical DRIVE retinal vessel segmentation.
+#
+# CUDA 12.x is the primary PyTorch build. Pixi's current recommendation is
+# conda-forge `pytorch-gpu` + `cuda-version` (NVIDIA CUDA libraries published
+# on conda-forge). The legacy `pytorch` + `nvidia` channel combo that provided
+# the `pytorch-cuda` metapackage is not mixed here: it conflicts with Napari/Qt
+# from conda-forge. See README.md → "Why not pytorch-cuda from the nvidia channel?".
+#
+# CPU platforms are declared as fallbacks for machines without an NVIDIA driver.
+# CUDA-named platforms are listed first so they win when a driver is present.
+
+[workspace]
+name = "drive-retinal-vessel-seg"
+version = "0.1.0"
+description = "DRIVE retinal vessel segmentation: Frangi → RF/SVM → U-Net (PyTorch + Pixi + Napari + Plotly)"
+channels = ["https://prefix.dev/conda-forge"]
+platforms = [
+  { name = "linux-64-cuda", platform = "linux-64", cuda = "12.0" },
+  { name = "win-64-cuda", platform = "win-64", cuda = "12.0" },
+  { name = "linux-64-cpu", platform = "linux-64" },
+  { name = "win-64-cpu", platform = "win-64" },
+]
+
+[activation.env]
+PYTHONPATH = "src"
+PYTHONUNBUFFERED = "1"
+
+[dependencies]
+python = "3.12.*"
+numpy = ">=1.26"
+scipy = ">=1.11"
+scikit-image = ">=0.22"
+scikit-learn = ">=1.4"
+pandas = ">=2.1"
+pillow = ">=10"
+imageio = ">=2.33"
+tifffile = ">=2024"
+tqdm = ">=4.66"
+plotly = ">=5.18"
+python-kaleido = "*"
+napari = ">=0.4.19"
+pyqt = ">=5.15"
+jupyterlab = ">=4"
+ipykernel = ">=6"
+ipywidgets = ">=8"
+joblib = "*"
+
+[target."*-cuda".dependencies]
+pytorch-gpu = "*"
+cuda-version = "12.*"
+
+[target."*-cpu".dependencies]
+pytorch-cpu = "*"
+
+[tasks]
+check-cuda = { cmd = "python -c \"import torch; print('torch', torch.__version__); print('cuda_available', torch.cuda.is_available()); print('device_count', torch.cuda.device_count()); print('device', torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu')\"" }
+check-stack = { cmd = "python scripts/check_stack.py" }
+generate-data = { cmd = "python scripts/generate_demo_data.py" }
+download-drive = { cmd = "python scripts/download_drive.py" }
+classical = { cmd = "python scripts/run_classical.py" }
+ml = { cmd = "python scripts/run_ml.py" }
+unet = { cmd = "python scripts/run_unet.py" }
+evaluate = { cmd = "python scripts/run_evaluate.py" }
+morphology = { cmd = "python scripts/run_morphology.py" }
+napari = { cmd = "python scripts/visualize_napari.py" }
+demo = { cmd = "python scripts/run_demo.py" }
+lab = { cmd = "jupyter lab notebooks" }

@@ -1,0 +1,52 @@
+[
+  {
+    "method": "frangi",
+    "vessel_density": 0.024513575904144224,
+    "length_px": 370.02669529663694,
+    "mean_width_px": 3.518326266078173,
+    "n_branch_points": 14.75,
+    "n_end_points": 22.75,
+    "mean_tortuosity": 1.0559946737856705,
+    "skeleton_pixels": 320.5
+  },
+  {
+    "method": "ground_truth",
+    "vessel_density": 0.05313290095635924,
+    "length_px": 949.567892581091,
+    "mean_width_px": 3.402096192565173,
+    "n_branch_points": 42.25,
+    "n_end_points": 19.5,
+    "mean_tortuosity": 1.074190906532143,
+    "skeleton_pixels": 790.5
+  },
+  {
+    "method": "rf",
+    "vessel_density": 0.05357260635374299,
+    "length_px": 949.5323586751583,
+    "mean_width_px": 3.420085704961396,
+    "n_branch_points": 42.5,
+    "n_end_points": 19.5,
+    "mean_tortuosity": 1.0738003393421947,
+    "skeleton_pixels": 790.75
+  },
+  {
+    "method": "svm",
+    "vessel_density": 0.05340771682972409,
+    "length_px": 946.9110383315987,
+    "mean_width_px": 3.4131226613852856,
+    "n_branch_points": 42.5,
+    "n_end_points": 19.5,
+    "mean_tortuosity": 1.0735427358107459,
+    "skeleton_pixels": 789.0
+  },
+  {
+    "method": "unet",
+    "vessel_density": 0.06919863691326811,
+    "length_px": 919.8338738653232,
+    "mean_width_px": 3.900204645044782,
+    "n_branch_points": 40.25,
+    "n_end_points": 29.75,
+    "mean_tortuosity": 1.0843791805004557,
+    "skeleton_pixels": 790.5
+  }
+]
