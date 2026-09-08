@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import numpy as np
 from skimage.filters import frangi, threshold_otsu
-from skimage.morphology import binary_opening, disk, remove_small_objects
+from skimage.morphology import disk, opening, remove_small_objects
 
 from .preprocess import prepare_gray
 
@@ -48,6 +48,6 @@ def segment_frangi(
     positive = values[values > np.percentile(values, 70)]
     thresh = float(threshold_otsu(positive)) if positive.size > 20 else float(np.percentile(values, 95))
     binary = (resp_fov >= thresh) & fov
-    binary = binary_opening(binary, disk(1))
-    binary = remove_small_objects(binary, min_size=min_size)
+    binary = opening(binary, disk(1))
+    binary = remove_small_objects(binary, max_size=max(min_size - 1, 0))
     return binary.astype(bool), resp_fov

@@ -57,7 +57,7 @@ fundus RGB
 | Constraint | How it is met |
 | --- | --- |
 | Pixi only, `linux-64` + `win-64` | `pixi.toml` — no `requirements.txt` |
-| PyTorch + NVIDIA CUDA 12.x | `pytorch-gpu` + `cuda-version = 12.4.*` on CUDA platforms |
+| PyTorch + NVIDIA CUDA 12.x | `pytorch-gpu` + `cuda-version = 12.*` on CUDA platforms |
 | CPU fallback | named `linux-64-cpu` / `win-64-cpu` platforms |
 | Napari | `napari` + `pyqt`; `pixi run napari` |
 | Plotly only for charts | `drive_seg.viz` — no matplotlib/seaborn plotting |
@@ -77,7 +77,7 @@ Pixi now treats that channel mix as **legacy**. Mixing the `pytorch`/`nvidia` ch
 ```toml
 [target."*-cuda".dependencies]
 pytorch-gpu = "*"
-cuda-version = "12.4.*"
+cuda-version = "12.*"
 ```
 
 with CUDA-capable platforms declared first so they win when an NVIDIA driver is present:
@@ -205,14 +205,13 @@ Launch with `pixi run lab` so the kernel sees the Pixi environment.
 
 ## Interpreting a demo run
 
-On **synthetic** data the ranking is a teaching device, not a DRIVE leaderboard. Typical pattern:
+On **synthetic** data the ranking is a teaching device, not a DRIVE leaderboard. A typical `pixi run demo` looks like:
 
-- **Frangi** finds the wide trunks and drops capillaries; sensitivity lags.
-- **RF** uses Frangi as one feature among several and usually improves Dice.
-- **Linear SVM** is a strong, fast baseline; it is not an RBF SVM.
-- **U-Net** needs enough epochs to beat RF on eight toy images. Increase `--epochs` on real DRIVE and use the GPU.
+- **Frangi** recovers the wide trunks (precision ≈ 1) and drops capillaries (sensitivity ≈ 0.47). Overlays show blue false negatives along thin branches.
+- **RF / linear SVM** nearly saturate Dice on this procedural set because the engineered features include Frangi plus clean intensity cues. That is the 2010s DRIVE story, not a claim about clinical photographs.
+- **U-Net** (12 short CPU epochs, base width 16) is high-sensitivity / lower-precision: it paints extra pixels around vessels. More epochs and a GPU on real DRIVE reverse that gap.
 
-Read morphology next to Dice. If U-Net Dice is highest but branch-point count is 3× the ground truth, you are looking at noisy capillaries or FOV-edge speckle — clinically the worse mask.
+Read morphology next to Dice. If U-Net Dice is high but branch-point count or length diverges from ground truth, you are looking at noisy capillaries or FOV-edge speckle — clinically the worse mask.
 
 Overlays use a fixed legend: **green = true positive**, **red = false positive**, **blue = false negative**.
 

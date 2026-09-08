@@ -23,6 +23,7 @@ platforms = [
 
 [activation.env]
 PYTHONPATH = "src"
+PYTHONUNBUFFERED = "1"
 
 [dependencies]
 python = "3.12.*"
@@ -46,7 +47,7 @@ joblib = "*"
 
 [target."*-cuda".dependencies]
 pytorch-gpu = "*"
-cuda-version = "12.4.*"
+cuda-version = "12.*"
 
 [target."*-cpu".dependencies]
 pytorch-cpu = "*"
